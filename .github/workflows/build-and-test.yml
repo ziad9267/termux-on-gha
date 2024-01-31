@@ -1,0 +1,42 @@
+name: ' ' # empty name
+on: [push, pull_request]
+
+jobs:
+  # This is what is currently necessary to make termux-docker work with GHA.
+  working:
+    runs-on: ubuntu-latest
+    container: termux/termux-docker:x86_64
+    steps:
+      - name: setup
+        run: |
+          # pkg/pip need to be prefixed with /entrypoint.sh because GHA overrode
+          # the entrypoint.
+          /entrypoint.sh pkg install -y ninja clang python git
+          /entrypoint.sh pip install meson
+      - name: checkout
+        run: |
+          # Checkout action doesn't work.
+          git clone --depth 1 -b $GITHUB_REF_NAME \
+              https://github.com/$GITHUB_REPOSITORY
+      - name: build
+        run: touch artifact
+      # upload-artifact action doesn't work either.
+
+  # This is the ideal way termux-docker would work with GHA.
+  broken-ideal:
+    runs-on: ubuntu-latest
+    container: termux/termux-docker:x86_64
+    steps:
+      - name: setup
+        run: |
+          pkg install -y ninja clang python git
+          pip install meson
+      - uses: actions/checkout@v3.3.0
+      - name: build
+        run: touch artifact
+      - uses: actions/upload-artifact@v3.1.2
+        if: always()
+        with:
+          name: artifact
+          path: artifact
+
