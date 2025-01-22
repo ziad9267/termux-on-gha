@@ -5,7 +5,13 @@ jobs:
   # This is what is currently necessary to make termux-docker work with GHA.
   working:
     runs-on: ubuntu-latest
-    container: termux/termux-docker:x86_64
+    # prepare writable volume prefix mount for actions/upload-artifact,
+    # based on the higher-profile workaround for 32-bit GNU/Linux containers explained here
+    # https://github.com/actions/upload-artifact/issues/616#issuecomment-2350667347
+    container:
+      image: termux/termux-docker:x86_64
+      volumes:
+      - ${{ github.workspace }}:/__e/node20
     steps:
       - name: setup
         run: |
@@ -20,10 +26,20 @@ jobs:
               https://github.com/$GITHUB_REPOSITORY
       - name: build
         run: touch artifact
-      # upload-artifact action doesn't work either.
+      - name: install bionic-libc nodejs to force compatibility with actions/upload-artifact
+        run: |
+          export HOME=/data/data/com.termux/files/home
+          /entrypoint.sh pkg install -y nodejs-lts
+          ln -sf /data/data/com.termux/files/usr/bin /__e/node20/bin
+      - uses: actions/upload-artifact@v4.6.0
+        if: always()
+        with:
+          name: artifact
+          path: artifact
 
   # This is the ideal way termux-docker would work with GHA.
   broken-ideal:
+    if: false
     runs-on: ubuntu-latest
     container: termux/termux-docker:x86_64
     steps:
