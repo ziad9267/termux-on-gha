@@ -67,11 +67,11 @@ jobs:
         run: |
           # pkg/pip need to be prefixed with /entrypoint.sh because GHA overrode
           # the entrypoint.
-          /entrypoint.sh pkg install -y ninja clang python git
+          /entrypoint.sh pkg install -y ninja python git
           /entrypoint.sh pip install meson
           #/entrypoint.sh ${{ inputs.packages }}
           /entrypoint.sh pkg install -y tur-repo x11-repo
-          /entrypoint.sh pkg install -y clang pkg-config pulseaudio fontconfig freetype gnutls mesa libx11 libxcursor libxfixes libxi libxrandr libxrender libxext vulkan-loader gstreamer gst-plugins-base sdl2 gst-plugins-good xorgproto
+          /entrypoint.sh pkg install -y pkg-config pulseaudio fontconfig freetype gnutls libx11 libxcursor libxfixes libxi libxrandr libxrender libxext vulkan-loader gstreamer gst-plugins-base gst-plugins-good xorgproto
       #- name: build
         #run: touch artifact
       - name: Compressing Termux files
@@ -99,7 +99,7 @@ jobs:
     steps:
       - name: setup
         run: |
-          pkg install -y ninja clang python git
+          pkg install -y ninja python git
           pip install meson
       - uses: actions/checkout@v3.3.0
       - name: build
