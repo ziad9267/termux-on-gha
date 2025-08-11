@@ -1,4 +1,4 @@
-name: ' ' # empty name
+name: 'Termux libs' # empty name
 #on: [push, pull_request]
 on:
   push:
