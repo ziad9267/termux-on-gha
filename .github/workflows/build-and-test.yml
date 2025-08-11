@@ -86,7 +86,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
          name: "termuxfs"
-         tag_name: "Wine libs"
+         tag_name: "test"
          prerelease: false
          files: |
           ./termuxfs.tar
