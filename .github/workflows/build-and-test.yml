@@ -1,5 +1,14 @@
 name: ' ' # empty name
-on: [push, pull_request]
+#on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    #inputs:
+      #packages:
+        #description: Type the command you want to run.
+        #required: true
+        #type: string
 
 jobs:
   # This is what is currently necessary to make termux-docker work with GHA.
@@ -7,14 +16,14 @@ jobs:
     strategy:
       matrix:
         include:
-          - runner: ubuntu-24.04
-            architecture: i686
+          #- runner: ubuntu-24.04
+            #architecture: i686
           - runner: ubuntu-24.04
             architecture: x86_64
-          - runner: ubuntu-24.04-arm
-            architecture: arm
-          - runner: ubuntu-24.04-arm
-            architecture: aarch64
+          #- runner: ubuntu-24.04-arm
+            #architecture: arm
+          #- runner: ubuntu-24.04-arm
+            #architecture: aarch64
     runs-on: ${{ matrix.runner }}
     # prepare writable volume prefix mount for actions/upload-artifact,
     # based on the higher-profile workaround for 32-bit GNU/Linux containers explained here
@@ -60,12 +69,27 @@ jobs:
           # the entrypoint.
           /entrypoint.sh pkg install -y ninja clang python git
           /entrypoint.sh pip install meson
-      - name: build
-        run: touch artifact
+          #/entrypoint.sh ${{ inputs.packages }}
+          /entrypoint.sh pkg install -y tur-repo x11-repo
+          /entrypoint.sh pkg install -y clang pkg-config pulseaudio fontconfig freetype gnutls mesa libx11 libxcursor libxfixes libxi libxrandr libxrender libxext vulkan-loader gstreamer gst-plugins-base sdl2 gst-plugins-good xorgproto
+      #- name: build
+        #run: touch artifact
+      - name: Compressing Termux files
+        run: tar cf termuxfs.tar /data/data/com.termux/files/usr
       - uses: actions/upload-artifact@v4.6.0
         with:
           name: artifact-${{ matrix.architecture }}
-          path: artifact
+          path: ./termuxfs.tar
+
+      - name: "Create Release"
+        if: github.event_name != 'pull_request'
+        uses: softprops/action-gh-release@v2
+        with:
+         name: "termuxfs"
+         tag_name: "Wine libs"
+         prerelease: false
+         files: |
+          ./termuxfs.tar
 
   # This is the ideal way termux-docker would work with GHA.
   broken-ideal:
