@@ -71,7 +71,7 @@ jobs:
           /entrypoint.sh pip install meson
           #/entrypoint.sh ${{ inputs.packages }}
           /entrypoint.sh pkg install -y tur-repo x11-repo
-          /entrypoint.sh pkg install -y xorg-dev libx11-dev build-essential pkg-config pulseaudio fontconfig freetype gnutls libx11 libxcursor libxfixes libxi libxrandr libxrender libxext vulkan-loader gstreamer gst-plugins-base gst-plugins-good xorgproto
+          /entrypoint.sh pkg install -y mesa build-essential pkg-config pulseaudio fontconfig freetype gnutls libx11 libxcursor libxfixes libxi libxrandr libxrender libxext vulkan-loader gstreamer gst-plugins-base gst-plugins-good xorgproto
       #- name: build
         #run: touch artifact
       - name: Compressing Termux files
