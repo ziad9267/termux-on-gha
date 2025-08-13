@@ -18,12 +18,12 @@ jobs:
         include:
           #- runner: ubuntu-24.04
             #architecture: i686
-          - runner: ubuntu-24.04
-            architecture: x86_64
+          #- runner: ubuntu-24.04
+            #architecture: x86_64
           #- runner: ubuntu-24.04-arm
             #architecture: arm
-          #- runner: ubuntu-24.04-arm
-            #architecture: aarch64
+          - runner: ubuntu-24.04-arm
+            architecture: aarch64
     runs-on: ${{ matrix.runner }}
     # prepare writable volume prefix mount for actions/upload-artifact,
     # based on the higher-profile workaround for 32-bit GNU/Linux containers explained here
