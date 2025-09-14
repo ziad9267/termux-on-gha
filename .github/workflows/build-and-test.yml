@@ -72,7 +72,7 @@ jobs:
           #/entrypoint.sh ${{ inputs.packages }}
           /entrypoint.sh pkg install -y tur-repo x11-repo
           /entrypoint.sh pkg install -y clang pkg-config alsa-lib pulseaudio fontconfig freetype gnutls mesa libx11 libxcursor libxfixes libxi libxrandr libxrender libxext vulkan-loader gstreamer gst-plugins-base sdl2 gst-plugins-good xorgproto
-          /entrypoint.sh pkg install -y fontconfig freetype krb5 libandroid-spawn libc++ libgmp libgnutls libxcb libxcomposite libxcursor libxfixes libxrender opengl pulseaudio sdl2 vulkan-loader xorg-xrandr libandroid-shmem libandroid-spawn
+          /entrypoint.sh pkg install -y fontconfig freetype krb5 libc++ libgmp libgnutls libxcb libxcomposite libxcursor libxfixes libxrender opengl pulseaudio sdl2 vulkan-loader xorg-xrandr libandroid-shmem libandroid-spawn ffmpeg
       #- name: build
         #run: touch artifact
       - name: Compressing Termux files
